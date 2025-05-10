@@ -1,4 +1,9 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import {
   MatPaginatorIntl,
   MatPaginatorModule,
@@ -47,7 +52,10 @@ export class TableComponent {
     'options',
   ];
 
-  constructor(private readonly companiesService: CompaniesService) {}
+  constructor(
+    private readonly companiesService: CompaniesService,
+    private readonly changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadCompanies();
@@ -58,7 +66,8 @@ export class TableComponent {
   }
 
   async add(company: Company) {
-    this.companies.unshift(company);
+    this.companies = [company, ...this.companies];
+    this.changeDetectorRef.detectChanges();
   }
 
   async onEdit(company: Company) {

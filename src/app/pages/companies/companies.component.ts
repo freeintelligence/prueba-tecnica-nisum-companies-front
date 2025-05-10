@@ -54,4 +54,40 @@ export class CompaniesComponent {
       }
     });
   }
+
+  onCreate() {
+    const company = new Company({
+      country: '',
+      industry: '',
+      linkedInUrl: '',
+      locality: '',
+      name: '',
+      region: '',
+      size: '',
+      website: '',
+    });
+
+    const dialogRef = this.dialog.open<
+      MaintainerFormDialogComponent,
+      MaintainerFormDialogData
+    >(MaintainerFormDialogComponent, {
+      width: '512px',
+      data: {
+        title: `Crear empresa`,
+        company,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((newCompany?: Company) => {
+      if (newCompany) {
+        this.table.add(newCompany);
+
+        this.snackBar.open(
+          `La empresa ${newCompany.name} ha sido creada exitosamente!`,
+          `Cerrar`,
+          { duration: 3000 }
+        );
+      }
+    });
+  }
 }
