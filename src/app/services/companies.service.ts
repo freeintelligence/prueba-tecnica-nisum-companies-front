@@ -4,7 +4,11 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 import companiesJson from '../dummy/companies.json';
-import { capitalizeEachWord, firstLetterToUpperCase, strToWebsite } from '../helpers/helpers';
+import {
+  capitalizeEachWord,
+  firstLetterToUpperCase,
+  strToWebsite,
+} from '../helpers/helpers';
 
 export interface GetCompaniesFiltersInterface {
   database?: string;
@@ -38,6 +42,10 @@ export interface GetRawCompaniesResponseInterface {
 export class CompaniesService {
   constructor(private readonly http: HttpClient) {}
 
+  getKeyByFilters(filters: GetCompaniesFiltersInterface) {
+    return JSON.stringify(filters);
+  }
+
   async getCompanies(
     filters: GetCompaniesFiltersInterface
   ): Promise<Company[]> {
@@ -49,6 +57,13 @@ export class CompaniesService {
   async getRawCompanies(filters: GetCompaniesFiltersInterface) {
     if (environment.USE_DUMMY) {
       return companiesJson as unknown as GetRawCompaniesResponseInterface;
+    }
+
+    const key = this.getKeyByFilters(filters);
+    const cachedCompanies = localStorage.getItem(key);
+
+    if (cachedCompanies !== null) {
+      return JSON.parse(cachedCompanies) as GetRawCompaniesResponseInterface;
     }
 
     const result = await firstValueFrom(
@@ -63,6 +78,8 @@ export class CompaniesService {
         }
       )
     );
+
+    localStorage.setItem(key, JSON.stringify(result));
 
     return result;
   }
