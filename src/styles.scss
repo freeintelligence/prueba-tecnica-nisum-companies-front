@@ -17,3 +17,25 @@ html {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+p {
+  margin: 0;
+  padding: 0;
+}
+
+div.simple-spinner-container {
+  padding: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+div.simple-error-container {
+  width: 100%;
+  padding: 32px;
+  text-align: center;
+
+  button {
+    margin-top: 16px;
+  }
+}
