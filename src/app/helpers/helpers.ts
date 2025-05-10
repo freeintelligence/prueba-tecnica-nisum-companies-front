@@ -9,3 +9,7 @@ export function capitalizeEachWord(str: string) {
 export function strToWebsite(str: string) {
   return `https://${str.toLowerCase()}`;
 }
+
+export function getRandomString() {
+  return Math.random().toString(36).substring(2, 15);
+}

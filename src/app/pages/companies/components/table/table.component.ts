@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import {
   MatPaginatorIntl,
   MatPaginatorModule,
@@ -14,6 +14,7 @@ import { CustomPaginatorIntl } from '../../../../helpers/custom-paginator-intl';
 import { NgIf } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-companies-table',
@@ -23,12 +24,15 @@ import { MatButtonModule } from '@angular/material/button';
     NgIf,
     MatProgressSpinnerModule,
     MatButtonModule,
+    MatIconModule,
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
   providers: [{ provide: MatPaginatorIntl, useClass: CustomPaginatorIntl }],
 })
 export class TableComponent {
+  @Output() edit: EventEmitter<Company> = new EventEmitter<Company>();
+
   public loading: boolean = false;
   public error: boolean = false;
   public companies: Company[] = [];
@@ -40,6 +44,7 @@ export class TableComponent {
     'name',
     'size',
     'website',
+    'options',
   ];
 
   constructor(private readonly companiesService: CompaniesService) {}
@@ -50,6 +55,26 @@ export class TableComponent {
 
   onPageChange(event: PageEvent) {
     this.loadCompanies(event.pageIndex);
+  }
+
+  async add(company: Company) {
+    this.companies.unshift(company);
+  }
+
+  async onEdit(company: Company) {
+    this.edit.emit(company);
+  }
+
+  async update(companyInternalId: string, company: Company) {
+    this.companies = this.companies.map((c) =>
+      c.internalId === companyInternalId ? company : c
+    );
+  }
+
+  async delete(company: Company) {
+    this.companies = this.companies.filter(
+      (c) => c.internalId !== company.internalId
+    );
   }
 
   async loadCompanies(pageIndex: number = 0) {

@@ -1,0 +1,96 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field style="width: 33.3%">
+      <mat-label>País</mat-label>
+      <input matInput formControlName="country" />
+      <mat-error *ngIf="form.get('country')?.hasError('required')"
+        >El país es obligatorio!</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field style="width: 33.3%">
+      <mat-label>Región</mat-label>
+      <input matInput formControlName="region" />
+      <mat-error *ngIf="form.get('region')?.hasError('required')"
+        >La región es obligatoria!</mat-error
+      >
+      <mat-error *ngIf="form.get('region')?.hasError('maxlength')"
+        >Máximo 50 caracteres!</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field style="width: 33.3%">
+      <mat-label>Localidad</mat-label>
+      <input matInput formControlName="locality" />
+      <mat-error *ngIf="form.get('locality')?.hasError('required')"
+        >La localidad es obligatoria!</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field style="width: 100%">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name" />
+      <mat-error *ngIf="form.get('name')?.hasError('required')"
+        >El nombre es obligatorio!</mat-error
+      >
+      <mat-error *ngIf="form.get('name')?.hasError('maxlength')"
+        >Máximo 64 caracteres!</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field style="width: 50%">
+      <mat-label>Industria</mat-label>
+      <input matInput formControlName="industry" />
+      <mat-error *ngIf="form.get('industry')?.hasError('required')"
+        >La industria es obligatoria!</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field style="width: 50%">
+      <mat-label>Tamaño</mat-label>
+      <input matInput formControlName="size" placeholder="Ej. 11-50" />
+      <mat-error *ngIf="form.get('size')?.hasError('required')"
+        >El tamaño es obligatorio!</mat-error
+      >
+      <mat-error *ngIf="form.get('size')?.hasError('minlength')"
+        >Mínimo 3 caracteres!</mat-error
+      >
+      <mat-error *ngIf="form.get('size')?.hasError('maxlength')"
+        >Máximo 10 caracteres!</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field style="width: 50%">
+      <mat-label>LinkedIn</mat-label>
+      <input
+        matInput
+        formControlName="linkedInUrl"
+        placeholder="Ej. linkedin.com/company/microsoft"
+      />
+      <mat-error *ngIf="form.get('linkedInUrl')?.hasError('required')"
+        >La página de LinkedIn es obligatoria!</mat-error
+      >
+      <mat-error *ngIf="form.get('linkedInUrl')?.hasError('pattern')"
+        >Debe seguir el formato:
+        linkedin.com/company/nombre-de-la-empresa</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field style="width: 50%">
+      <mat-label>Sitio Web</mat-label>
+      <input
+        matInput
+        formControlName="website"
+        placeholder="Ej. microsoft.com"
+      />
+      <mat-error *ngIf="form.get('website')?.hasError('required')"
+        >La página de LinkedIn es obligatoria!</mat-error
+      >
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="cancel()" cdkFocusInitial>Cancelar</button>
+  <button mat-flat-button (click)="submit()">Guardar</button>
+</mat-dialog-actions>

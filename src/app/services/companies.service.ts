@@ -4,11 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 import companiesJson from '../dummy/companies.json';
-import {
-  capitalizeEachWord,
-  firstLetterToUpperCase,
-  strToWebsite,
-} from '../helpers/helpers';
+import { capitalizeEachWord, firstLetterToUpperCase } from '../helpers/helpers';
 
 export interface GetCompaniesFiltersInterface {
   database?: string;
@@ -51,7 +47,7 @@ export class CompaniesService {
   ): Promise<Company[]> {
     const rawCompanies = await this.getRawCompanies(filters);
 
-    return this.rawCompaniesToCompaniesModel(rawCompanies);
+    return this.rawCompaniesToCompaniesModel(rawCompanies.results);
   }
 
   async getRawCompanies(filters: GetCompaniesFiltersInterface) {
@@ -85,18 +81,20 @@ export class CompaniesService {
   }
 
   rawCompaniesToCompaniesModel(
-    rawCompanies: GetRawCompaniesResponseInterface
+    rawCompanies: GetRawCompaniesResponseInterface['results']
   ): Company[] {
-    return rawCompanies.results.map((company) => ({
-      country: capitalizeEachWord(company.country),
-      industry: firstLetterToUpperCase(company.industry),
-      linkedInUrl: company.linkedin_url,
-      locality: capitalizeEachWord(company.locality),
-      name: company.name?.toUpperCase(),
-      region: capitalizeEachWord(company.region),
-      size: company.size,
-      website: company.website,
-      internalWebsite: strToWebsite(company.website),
-    }));
+    return rawCompanies.map(
+      (company) =>
+        new Company({
+          country: capitalizeEachWord(company.country),
+          industry: firstLetterToUpperCase(company.industry),
+          linkedInUrl: company.linkedin_url,
+          locality: capitalizeEachWord(company.locality),
+          name: company.name?.toUpperCase(),
+          region: capitalizeEachWord(company.region),
+          size: company.size,
+          website: company.website,
+        })
+    );
   }
 }
